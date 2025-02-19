@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Blog {
     private final List<BlogPost> posts;
@@ -18,6 +19,15 @@ public class Blog {
 
     public List<Person> getContributors() {
         return contributors;
+    }
+
+    public List<String> getPostsByAuthorAge(Integer age) {
+        return posts.stream()
+                .filter(post -> contributors.stream()
+                        .anyMatch(person -> person.getId().equals(post.getAuthorId()) &&
+                                person.getAge() != null && person.getAge().equals(age)))
+                .map(BlogPost::getId)
+                .collect(Collectors.toList());
     }
 
     @Override
